@@ -1,23 +1,19 @@
 import streamlit as st
-import cv2
-import numpy as np
-
-def main():
-    st.title("Webcam Live Feed")
-    run = st.checkbox('Run')
-
-    # Create a placeholder for the video feed
-    FRAME_WINDOW = st.image([])
-
-    # Initialize the webcam
-    camera = cv2.VideoCapture(0)
-
-    while run:
-        _, frame = camera.read()
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        FRAME_WINDOW.image(frame)
-    else:
-        st.write('Stopped')
-
-if __name__ == '__main__':
-    main()
+import os
+def save_uploadedfile(uploadedfile):
+    with open(os.path.join("./media-directory/", "selfie.jpg"), "wb") as f:
+        f.write(uploadedfile.getbuffer())
+    
+picture = st.camera_input("Take a picture")
+st.markdown('')
+if picture:
+    st.sidebar.divider()
+    st.sidebar.image(picture, caption="Selfie")
+    if st.button("Segment!"):
+        ## Function to save image
+        save_uploadedfile(picture)
+        st.sidebar.success("Saved File")
+        selfie_img = os.path.join("media-directory", "/selfie.jpg")
+    st.write("Click on **Clear photo** to retake picture")
+    img_file = './media-directory/selfie.jpg'
+st.divider()
